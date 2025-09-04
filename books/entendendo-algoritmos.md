@@ -79,5 +79,127 @@
 **Resumo IA:** Método intuitivo e versátil, mas pesado para consultas grandes.
 
 ---
-- Sugestões: árvores, MapReduce, filtros probabilísticos, criptografia, programação linear.  
-**Resumo IA:** Lista de caminhos para aprofundamento em algoritmos e ciência da computação.
+
+
+# Exemplos de código (Python)
+
+A seguir, algumas implementações simplificadas dos algoritmos mais importantes apresentados no livro:
+
+### Pesquisa binária
+```python
+def pesquisa_binaria(lista, item):
+    baixo, alto = 0, len(lista) - 1
+    while baixo <= alto:
+        meio = (baixo + alto) // 2
+        chute = lista[meio]
+        if chute == item:
+            return meio
+        if chute > item:
+            alto = meio - 1
+        else:
+            baixo = meio + 1
+    return None
+```
+
+### Ordenação por seleção
+```python
+def busca_menor(arr):
+    menor = arr[0]
+    menor_indice = 0
+    for i in range(1, len(arr)):
+        if arr[i] < menor:
+            menor = arr[i]
+            menor_indice = i
+    return menor_indice
+
+def ordenacao_por_selecao(arr):
+    novo_arr = []
+    for _ in range(len(arr)):
+        menor = busca_menor(arr)
+        novo_arr.append(arr.pop(menor))
+    return novo_arr
+```
+
+### Quicksort
+```python
+def quicksort(arr):
+    if len(arr) < 2:
+        return arr
+    else:
+        pivo = arr[0]
+        menores = [i for i in arr[1:] if i <= pivo]
+        maiores = [i for i in arr[1:] if i > pivo]
+        return quicksort(menores) + [pivo] + quicksort(maiores)
+```
+
+### Pesquisa em largura (BFS)
+```python
+from collections import deque
+
+def pesquisa_em_largura(grafo, inicio):
+    fila = deque()
+    fila += grafo[inicio]
+    visitados = set()
+    while fila:
+        pessoa = fila.popleft()
+        if pessoa not in visitados:
+            print(pessoa)
+            fila += grafo.get(pessoa, [])
+            visitados.add(pessoa)
+```
+
+### Dijkstra
+```python
+def dijkstra(grafo, inicio):
+    custos = {n: float("inf") for n in grafo}
+    custos[inicio] = 0
+    pais = {}
+    processados = set()
+
+    nodo = inicio
+    while nodo is not None:
+        custo = custos[nodo]
+        vizinhos = grafo[nodo]
+        for v in vizinhos:
+            novo_custo = custo + vizinhos[v]
+            if novo_custo < custos[v]:
+                custos[v] = novo_custo
+                pais[v] = nodo
+        processados.add(nodo)
+        nodo = min(
+            (n for n in custos if n not in processados),
+            key=custos.get,
+            default=None
+        )
+    return custos, pais
+```
+
+### Programação dinâmica — Problema da mochila
+```python
+def mochila(capacidade, pesos, valores, n):
+    if n == 0 or capacidade == 0:
+        return 0
+    if pesos[n-1] > capacidade:
+        return mochila(capacidade, pesos, valores, n-1)
+    else:
+        return max(
+            valores[n-1] + mochila(capacidade - pesos[n-1], pesos, valores, n-1),
+            mochila(capacidade, pesos, valores, n-1)
+        )
+```
+
+### K-vizinhos mais próximos (KNN — versão simplificada)
+```python
+import math
+from collections import Counter
+
+def distancia_euclidiana(p1, p2):
+    return math.sqrt(sum((x - y) ** 2 for x, y in zip(p1, p2)))
+
+def knn(dados, consulta, k=3):
+    distancias = [(distancia_euclidiana(consulta, ponto[:-1]), ponto[-1]) for ponto in dados]
+    distancias.sort(key=lambda x: x[0])
+    vizinhos = [rotulo for _, rotulo in distancias[:k]]
+    return Counter(vizinhos).most_common(1)[0][0]
+```
+
